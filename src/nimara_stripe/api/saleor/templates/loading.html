@@ -1,0 +1,109 @@
+{% extends "base.html" %} {% block extra_css %}
+<style>
+  .loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    border: 3px solid;
+    border-color: #fff #fff transparent transparent;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+
+  .loader::after,
+  .loader::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px solid;
+    border-color: transparent transparent #2b9ce8 #2b9ce8;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: rotationBack 0.5s linear infinite;
+    transform-origin: center center;
+  }
+
+  .loader::before {
+    width: 32px;
+    height: 32px;
+    border-color: #fff #fff transparent transparent;
+    animation: rotation 1.5s linear infinite;
+  }
+
+  .spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .loader {
+      border-color: #000 #000 transparent transparent;
+    }
+
+    .loader::before {
+      border-color: transparent transparent #000 #000;
+    }
+  }
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes rotationBack {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(-360deg);
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="section">
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <div class="spinner m-auto">
+          <span class="loader"></span>
+        </div>
+        <form
+          id="actionForm"
+          action="{{ url_for('saleor-data-fetch') }}?domain={{ query_params.domain }}&saleorApiUrl={{ query_params.saleorApiUrl | urlencode }}"
+          method="post"
+        >
+          <input id="jwtInput" type="hidden" name="jwt" value />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_javascript %}
+<script type="module">
+  window.addEventListener("message", async (event) => {
+    console.log("Message received", event.data);
+    if (event.data.type === "handshake") {
+      const jwt = event.data.payload.token;
+      document.getElementById("jwtInput").value = jwt;
+      document.getElementById("actionForm").submit();
+    }
+  });
+</script>
+{% endblock %}

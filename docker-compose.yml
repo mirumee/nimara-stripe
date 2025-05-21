@@ -1,0 +1,64 @@
+# Define networks
+networks:
+  localstack:
+    external: true
+
+# Common configuration for services
+x-common: &common
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  environment:
+    # Application configuration
+    DEBUG: ${DEBUG:-false}
+    ENVIRONMENT: ${ENVIRONMENT:-local}
+
+    # AWS configuration
+    AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL:-http://localstack:4566}
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+    AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-eu-central-1}
+
+    # Application specific configuration
+    SECRET_APP_CONFIG_PATH: ${SECRET_APP_CONFIG_PATH:-/tmp/app-config.json}
+    ALLOWED_DOMAIN_PATTERN: ${ALLOWED_DOMAIN_PATTERN:-.*}
+    API_GW_VERSION: 2
+
+services:
+  # Main application service
+  app:
+    <<: *common
+    entrypoint: python -m smyth
+    working_dir: "/app/src"
+    volumes:
+      - ./src/:/app/src/
+      - ./libs/:/app/libs/
+      - ./pyproject.toml:/app/pyproject.toml
+    networks:
+      - localstack
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+
+  # Setup service for initial configuration
+  configurator:
+    <<: *common
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        echo "Setting up initial configuration..."
+        uv run etc/aws_local_setup.py --localstack-host=localstack create-secret $SECRET_APP_CONFIG_PATH
+    networks:
+      - localstack
+    volumes:
+      - ./etc/:/app/etc/

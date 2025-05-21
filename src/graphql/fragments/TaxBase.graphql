@@ -1,0 +1,64 @@
+fragment TaxBaseLine on TaxableObjectLine {
+  sourceLine {
+    __typename
+    ... on CheckoutLine {
+      id
+      checkoutProductVariant: variant {
+        id
+        product {
+          taxClass {
+            id
+            name
+          }
+        }
+      }
+    }
+    ... on OrderLine {
+      id
+      orderProductVariant: variant {
+        id
+        product {
+          taxClass {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+  quantity
+  unitPrice {
+    amount
+  }
+  totalPrice {
+    ...Money
+  }
+  productSku
+}
+
+fragment TaxDiscount on TaxableObjectDiscount {
+  name
+  amount {
+    amount
+  }
+}
+
+fragment TaxBase on TaxableObject {
+  pricesEnteredWithTax
+  currency
+  channel {
+    slug
+  }
+  discounts {
+    ...TaxDiscount
+  }
+  address {
+    ...Address
+  }
+  shippingPrice {
+    ...Money
+  }
+  lines {
+    ...TaxBaseLine
+  }
+}

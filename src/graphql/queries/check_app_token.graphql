@@ -1,0 +1,5 @@
+query checkAppToken {
+  app {
+    id
+  }
+}

@@ -1,0 +1,10 @@
+aws_region              = "eu-central-1"
+environment             = "" # A unique name to avoid overwriting existing environments
+lambda_tag              = "0.9.8" # Should match the version of the app
+app_name                = "nimara-stripe"
+runtime                 = "python3.12"
+arch                    = "arm64"
+handler                 = "nimara_stripe.app.http_handler"
+provider_bucket_name    = "" # A shared bucket with tfstate files
+timeout                 = 10
+allowed_domain_patterns = "\\.saleor\\.cloud$"

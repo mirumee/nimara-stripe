@@ -1,0 +1,62 @@
+{
+    "path": "/",
+    "headers": {
+      "Content-Type": "application/json",
+      "User-Agent": "PostmanRuntime/7.36.0",
+      "accept": "*/*",
+      "Postman-Token": "e38b1271-c9cd-486e-bcfd-bc360a6f3c10",
+      "Host": "14zoiqf4fv.execute-api.localhost.localstack.cloud:4566",
+      "accept-encoding": "gzip, deflate, br",
+      "Connection": "keep-alive",
+      "Content-Length": "22",
+      "x-localstack-tgt-api": "apigateway",
+      "X-Forwarded-For": "172.17.0.1, 14zoiqf4fv.execute-api.localhost.localstack.cloud:4566",
+      "x-localstack-edge": "http://14zoiqf4fv.execute-api.localhost.localstack.cloud:4566"
+    },
+    "multiValueHeaders": {
+      "Content-Type": ["application/json"],
+      "User-Agent": ["PostmanRuntime/7.36.0"],
+      "accept": ["*/*"],
+      "Postman-Token": ["e38b1271-c9cd-486e-bcfd-bc360a6f3c10"],
+      "Host": ["14zoiqf4fv.execute-api.localhost.localstack.cloud:4566"],
+      "accept-encoding": ["gzip, deflate, br"],
+      "Connection": ["keep-alive"],
+      "Content-Length": ["22"],
+      "x-localstack-tgt-api": ["apigateway"],
+      "X-Forwarded-For": [
+        "172.17.0.1, 14zoiqf4fv.execute-api.localhost.localstack.cloud:4566"
+      ],
+      "x-localstack-edge": [
+        "http://14zoiqf4fv.execute-api.localhost.localstack.cloud:4566"
+      ]
+    },
+    "body": "{\n \"kaka\": \"lala\"\n}",
+    "isBase64Encoded": false,
+    "httpMethod": "GET",
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": {},
+    "resource": "/",
+    "requestContext": {
+      "accountId": "000000000000",
+      "apiId": "14zoiqf4fv",
+      "resourcePath": "/",
+      "domainPrefix": "14zoiqf4fv",
+      "domainName": "14zoiqf4fv.execute-api.localhost.localstack.cloud",
+      "resourceId": "fwtu7b5l1t",
+      "requestId": "d5542c83-a9df-4e84-a70d-b7ef60aca47d",
+      "identity": {
+        "accountId": "000000000000",
+        "sourceIp": "172.17.0.1",
+        "userAgent": "PostmanRuntime/7.36.0"
+      },
+      "httpMethod": "GET",
+      "protocol": "HTTP/1.1",
+      "requestTime": "06/Jan/2024:12:19:32 +0000",
+      "requestTimeEpoch": 1704543572400,
+      "authorizer": {},
+      "path": "/test/",
+      "stage": "test"
+    },
+    "stageVariables": {}
+  }

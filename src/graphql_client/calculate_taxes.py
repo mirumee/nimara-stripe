@@ -1,0 +1,206 @@
+from typing import Annotated, List, Literal, Optional, Union
+
+from pydantic import Field
+
+from .base_model import BaseModel
+from .fragments import TaxBase
+
+
+class CalculateTaxes(BaseModel):
+    event: Optional[
+        Annotated[
+            Union["CalculateTaxesEventEvent", "CalculateTaxesEventCalculateTaxes"],
+            Field(discriminator="typename__"),
+        ]
+    ]
+
+
+class CalculateTaxesEventEvent(BaseModel):
+    typename__: Literal[
+        "AccountChangeEmailRequested",
+        "AccountConfirmationRequested",
+        "AccountConfirmed",
+        "AccountDeleteRequested",
+        "AccountDeleted",
+        "AccountEmailChanged",
+        "AccountSetPasswordRequested",
+        "AddressCreated",
+        "AddressDeleted",
+        "AddressUpdated",
+        "AppDeleted",
+        "AppInstalled",
+        "AppStatusChanged",
+        "AppUpdated",
+        "AttributeCreated",
+        "AttributeDeleted",
+        "AttributeUpdated",
+        "AttributeValueCreated",
+        "AttributeValueDeleted",
+        "AttributeValueUpdated",
+        "CategoryCreated",
+        "CategoryDeleted",
+        "CategoryUpdated",
+        "ChannelCreated",
+        "ChannelDeleted",
+        "ChannelMetadataUpdated",
+        "ChannelStatusChanged",
+        "ChannelUpdated",
+        "CheckoutCreated",
+        "CheckoutFilterShippingMethods",
+        "CheckoutFullyPaid",
+        "CheckoutMetadataUpdated",
+        "CheckoutUpdated",
+        "CollectionCreated",
+        "CollectionDeleted",
+        "CollectionMetadataUpdated",
+        "CollectionUpdated",
+        "CustomerCreated",
+        "CustomerMetadataUpdated",
+        "CustomerUpdated",
+        "DraftOrderCreated",
+        "DraftOrderDeleted",
+        "DraftOrderUpdated",
+        "Event",
+        "FulfillmentApproved",
+        "FulfillmentCanceled",
+        "FulfillmentCreated",
+        "FulfillmentMetadataUpdated",
+        "FulfillmentTrackingNumberUpdated",
+        "GiftCardCreated",
+        "GiftCardDeleted",
+        "GiftCardExportCompleted",
+        "GiftCardMetadataUpdated",
+        "GiftCardSent",
+        "GiftCardStatusChanged",
+        "GiftCardUpdated",
+        "InvoiceDeleted",
+        "InvoiceRequested",
+        "InvoiceSent",
+        "ListStoredPaymentMethods",
+        "MenuCreated",
+        "MenuDeleted",
+        "MenuItemCreated",
+        "MenuItemDeleted",
+        "MenuItemUpdated",
+        "MenuUpdated",
+        "OrderBulkCreated",
+        "OrderCancelled",
+        "OrderConfirmed",
+        "OrderCreated",
+        "OrderExpired",
+        "OrderFilterShippingMethods",
+        "OrderFulfilled",
+        "OrderFullyPaid",
+        "OrderFullyRefunded",
+        "OrderMetadataUpdated",
+        "OrderPaid",
+        "OrderRefunded",
+        "OrderUpdated",
+        "PageCreated",
+        "PageDeleted",
+        "PageTypeCreated",
+        "PageTypeDeleted",
+        "PageTypeUpdated",
+        "PageUpdated",
+        "PaymentAuthorize",
+        "PaymentCaptureEvent",
+        "PaymentConfirmEvent",
+        "PaymentGatewayInitializeSession",
+        "PaymentGatewayInitializeTokenizationSession",
+        "PaymentListGateways",
+        "PaymentMethodInitializeTokenizationSession",
+        "PaymentMethodProcessTokenizationSession",
+        "PaymentProcessEvent",
+        "PaymentRefundEvent",
+        "PaymentVoidEvent",
+        "PermissionGroupCreated",
+        "PermissionGroupDeleted",
+        "PermissionGroupUpdated",
+        "ProductCreated",
+        "ProductDeleted",
+        "ProductExportCompleted",
+        "ProductMediaCreated",
+        "ProductMediaDeleted",
+        "ProductMediaUpdated",
+        "ProductMetadataUpdated",
+        "ProductUpdated",
+        "ProductVariantBackInStock",
+        "ProductVariantCreated",
+        "ProductVariantDeleted",
+        "ProductVariantMetadataUpdated",
+        "ProductVariantOutOfStock",
+        "ProductVariantStockUpdated",
+        "ProductVariantUpdated",
+        "PromotionCreated",
+        "PromotionDeleted",
+        "PromotionEnded",
+        "PromotionRuleCreated",
+        "PromotionRuleDeleted",
+        "PromotionRuleUpdated",
+        "PromotionStarted",
+        "PromotionUpdated",
+        "SaleCreated",
+        "SaleDeleted",
+        "SaleToggle",
+        "SaleUpdated",
+        "ShippingListMethodsForCheckout",
+        "ShippingPriceCreated",
+        "ShippingPriceDeleted",
+        "ShippingPriceUpdated",
+        "ShippingZoneCreated",
+        "ShippingZoneDeleted",
+        "ShippingZoneMetadataUpdated",
+        "ShippingZoneUpdated",
+        "ShopMetadataUpdated",
+        "StaffCreated",
+        "StaffDeleted",
+        "StaffSetPasswordRequested",
+        "StaffUpdated",
+        "StoredPaymentMethodDeleteRequested",
+        "ThumbnailCreated",
+        "TransactionCancelationRequested",
+        "TransactionChargeRequested",
+        "TransactionInitializeSession",
+        "TransactionItemMetadataUpdated",
+        "TransactionProcessSession",
+        "TransactionRefundRequested",
+        "TranslationCreated",
+        "TranslationUpdated",
+        "VoucherCodeExportCompleted",
+        "VoucherCodesCreated",
+        "VoucherCodesDeleted",
+        "VoucherCreated",
+        "VoucherDeleted",
+        "VoucherMetadataUpdated",
+        "VoucherUpdated",
+        "WarehouseCreated",
+        "WarehouseDeleted",
+        "WarehouseMetadataUpdated",
+        "WarehouseUpdated",
+    ] = Field(alias="__typename")
+
+
+class CalculateTaxesEventCalculateTaxes(BaseModel):
+    typename__: Literal["CalculateTaxes"] = Field(alias="__typename")
+    tax_base: "CalculateTaxesEventCalculateTaxesTaxBase" = Field(alias="taxBase")
+    recipient: Optional["CalculateTaxesEventCalculateTaxesRecipient"]
+
+
+class CalculateTaxesEventCalculateTaxesTaxBase(TaxBase):
+    pass
+
+
+class CalculateTaxesEventCalculateTaxesRecipient(BaseModel):
+    private_metadata: List[
+        "CalculateTaxesEventCalculateTaxesRecipientPrivateMetadata"
+    ] = Field(alias="privateMetadata")
+
+
+class CalculateTaxesEventCalculateTaxesRecipientPrivateMetadata(BaseModel):
+    key: str
+    value: str
+
+
+CalculateTaxes.model_rebuild()
+CalculateTaxesEventCalculateTaxes.model_rebuild()
+CalculateTaxesEventCalculateTaxesRecipient.model_rebuild()

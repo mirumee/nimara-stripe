@@ -1,0 +1,193 @@
+[project]
+name = "nimara-stripe"
+version = "1.0.0"
+requires-python = "~=3.12"
+description = "Integration between Stripe and Saleor for payment processing"
+authors = [
+    { name = "Mirumee", email = "hello@mirumee.com" }
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "fastapi[standard]>=0.115.6",
+    "lynara>=0.2.0",
+    "pydantic>=2.10.3",
+    "pydantic-settings>=2.6.1",
+    "boto3>=1.35.82",
+    "boto3_type_annotations>=0.3.1",
+    "pyjwt>=2.8.0",
+    "httpx>=0.25.1",
+    "aws-lambda-powertools>=2.26.1",
+    "asgiref>=3.7.2",
+    "saleor-sdk-python>=0.2.1",
+    "aws-xray-sdk>=2.12.1",
+    "stripe>=8.3.0",
+    "python-multipart>=0.0.18",
+    "uvloop>=0.21.0",
+    "cachetools>=5.5.2",
+]
+
+[dependency-groups]
+dev = [
+    "ariadne-codegen[subscriptions]>=0.14.0",
+    "smyth>=0.7.0",
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "pytest-env>=1.1.5",
+    "pytest-httpx>=0.35.0",
+    "pytest-mock>=3.14.0",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.8.2",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.1",
+    "bandit>=1.7.5",
+]
+
+[tool.uv.pip]
+no-sources = true
+python-platform = "aarch64-manylinux240"
+target = "./dist"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nimara_stripe", "src/graphql_client"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# TOOLS
+## Ariadne Codegen Configuration
+
+[tool.ariadne-codegen]
+remote_schema_url = "https://example.com/graphql/"  # Example URL, replace with appropriate example
+queries_path = "./src/graphql/"
+target_package_path = "./src"
+client_name = "AutoGenClient"
+include_comments = "none"
+include_all_inputs = false
+include_all_enums = false
+plugins = [
+    "ariadne_codegen.contrib.extract_operations.ExtractOperationsPlugin",
+    "ariadne_codegen.contrib.shorter_results.ShorterResultsPlugin",
+    "ariadne_codegen.contrib.client_forward_refs.ClientForwardRefsPlugin",
+]
+
+## Smyth Configuration
+
+[tool.smyth]
+host = "0.0.0.0"
+port = 8080
+log_level = "DEBUG"
+
+[tool.smyth.handlers.saleor_handler]
+handler_path = "nimara_stripe.api.saleor.app.saleor_http_handler"
+url_path = "/saleor/{path:path}"
+timeout = 15
+concurrency = 3
+
+[tool.smyth.handlers.stripe_handler]
+handler_path = "nimara_stripe.api.stripe.app.stripe_http_handler"
+url_path = "/payment/{path:path}"
+timeout = 15
+concurrency = 3
+
+## Ruff Configuration
+
+[tool.ruff]
+exclude = ["src/graphql_client"]
+line-length = 99
+target-version = "py312"
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 80
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true
+
+[tool.ruff.lint]
+select = ["E", "F", "G", "I", "N", "Q", "UP", "C90", "T20", "TID"]
+unfixable = ["UP007"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
+
+## Pytest Configuration
+
+[tool.pytest.ini_options]
+env = [
+    "AWS_ACCESS_KEY_ID=test_aws_access_key_id",
+    "AWS_SECRET_ACCESS_KEY=test_aws_secret_access_key",
+    "AWS_SESSION_TOKEN=test_aws_session_token",
+    "AWS_DEFAULT_REGION=us-east-1",
+    "SECRET_APP_CONFIG_PATH=test_app_config_path",
+    "ALLOWED_DOMAIN_PATTERN=",
+    "ENVIRONMENT=DEV",
+    "VERSION=0.1.0",
+    "DEBUG=True",
+    "API_GW_VERSION=2",
+]
+testpaths = "tests"
+asyncio_default_fixture_loop_scope = "function"
+
+## Coverage configuration
+
+[tool.coverage.run]
+source_pkgs = ["nimara_stripe"]
+branch = true
+parallel = true
+omit = ["src/graphql_client/*"]
+
+[tool.coverage.paths]
+nimara_stripe = ["src/nimara_stripe"]
+tests = ["tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstract",
+]
+fail_under = 80
+
+## Types configuration
+
+[tool.mypy]
+files = ["src/**/*.py"]
+exclude = ['src/graphql_client']
+plugins = ["pydantic.mypy"]
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+disallow_untyped_defs = true
+strict = true
+disable_error_code = ["import-untyped"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+## Security tools
+
+[tool.bandit]
+exclude_dirs = ["tests", "src/graphql_client"]
+targets = ["src"]

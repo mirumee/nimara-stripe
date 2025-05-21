@@ -1,0 +1,27 @@
+{
+
+    "path": "/my-resource",
+    "httpMethod": "GET",
+  
+  
+    "body": "",
+    "isBase64Encoded": false,
+    
+    "headers": {
+      "host": "api.example.com",
+      "user-agent": "Mozilla/5.0",
+      "accept": "application/json"
+    },
+  
+    "queryStringParameters": {
+      "param1": "value1",
+      "param2": "value2"
+    },
+  
+    "requestContext": {
+      "elb": {
+        "targetGroupArn": "arn:aws:elasticloadbalancing:region:account-id:targetgroup/target-group-id",
+        "listenerArn": "arn:aws:elasticloadbalancing:region:account-id:listener/listener-id"
+      }
+    }
+  }

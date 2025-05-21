@@ -1,0 +1,176 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <div class="section">
+    <article class="message is-info">
+      <div class="message-header">
+        <p>Info</p>
+      </div>
+      <div class="message-body">
+        <p>Hello <strong>{{ user.email }}</strong>.</p>
+        <p>Use the form bellow to setup your Saleor application.</p>
+      </div>
+    </article>
+    <form class="box" action="" method="post">
+      <div class="field">
+        <label class="label" for="saleorDomain">Saleor Domain</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            id="saleorDomain"
+            name="saleor_domain"
+            value="{{ saleor_domain }}"
+            readonly
+            disabled
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="saleorAppId">Saleor App ID</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            id="saleorAppId"
+            name="saleor_app_id"
+            value="{{ saleor_app_id }}"
+            readonly
+            disabled
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="authToken">Auth Token</label>
+        <div class="control">
+          <input
+            class="input"
+            type="password"
+            id="authToken"
+            name="auth_token"
+            value="{{ auth_token }}"
+            readonly
+            disabled
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary" type="submit" disabled>
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <article class="message is-info">
+      <div class="message-header">
+        <p>Configuration per channel</p>
+      </div>
+      <div class="message-body">
+        <p>
+          Use the form bellow the table to set or override settings for
+          particular channel.
+        </p>
+      </div>
+    </article>
+
+    {% if config_per_channel %}
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Channel Slug</th>
+          <th>Stripe Public Key</th>
+          <th>Stripe Secret Key</th>
+          <th>Stripe Webhook Secret Key</th>
+        </tr>
+      </thead>
+      <tbody id="channelsTableBody">
+        {% for channel_slug, channel_config in config_per_channel.items() %}
+        <tr>
+          <td>{{ channel_slug }}</td>
+          <td>{{ channel_config.stripe_pub_key }}</td>
+          <td>{{ channel_config.stripe_secret_key }}</td>
+          <td>{{ channel_config.stripe_webhook_secret_key }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% endif %}
+
+    <form
+      class="box"
+      action="{{ url_for('saleor-data-update-channel-config') }}?domain={{ saleor_domain }}"
+      method="post"
+    >
+      <input id="jwtInput" type="hidden" name="jwt" value />
+      <div class="field">
+        <label class="label" for="channelSlug">Channel slug</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            id="channelSlug"
+            name="channel_slug"
+          />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="stripePublicKey">Stripe Public Key</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            id="stripePublicKey"
+            name="stripe_pub_key"
+          />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="stripeSecretKey">Stripe Secret Key</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            id="stripeSecretKey"
+            name="stripe_secret_key"
+          />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="stripeWebhookSecretKey"
+          >Stripe Webhook Secret Key</label
+        >
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            id="stripeWebhookSecretKey"
+            name="stripe_webhook_secret_key"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary" type="submit">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %} {% block extra_javascript %}
+<script type="module">
+  window.addEventListener("message", async (event) => {
+    console.log("Message received", event.data);
+    if (event.data.type === "handshake") {
+      const jwt = event.data.payload.token;
+      document.getElementById("jwtInput").value = jwt;
+    }
+  });
+</script>
+{% endblock %}
