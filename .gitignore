@@ -61,6 +61,7 @@ terraform.rc
 
 .venv
 .mypy_cache
+.ropeproject
 
 # Ignore deploy.tfvars file
 **/terraform.tfvars
