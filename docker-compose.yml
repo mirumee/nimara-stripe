@@ -11,7 +11,7 @@ x-common: &common
   restart: unless-stopped
   environment:
     # Application configuration
-    DEBUG: ${DEBUG:-false}
+    DEBUG: ${DEBUG:-true}
     ENVIRONMENT: ${ENVIRONMENT:-local}
 
     # AWS configuration
@@ -22,7 +22,7 @@ x-common: &common
     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-eu-central-1}
 
     # Application specific configuration
-    SECRET_APP_CONFIG_PATH: ${SECRET_APP_CONFIG_PATH:-/tmp/app-config.json}
+    SECRET_APP_CONFIG_PATH: ${SECRET_APP_CONFIG_PATH:-test}
     ALLOWED_DOMAIN_PATTERN: ${ALLOWED_DOMAIN_PATTERN:-.*}
     API_GW_VERSION: 2
 
@@ -40,12 +40,6 @@ services:
       - localstack
     ports:
       - "${APP_PORT:-8080}:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
     depends_on:
       configurator:
         condition: service_completed_successfully
@@ -53,6 +47,7 @@ services:
   # Setup service for initial configuration
   configurator:
     <<: *common
+    restart: no
     entrypoint: ["bash", "-c"]
     command:
       - |

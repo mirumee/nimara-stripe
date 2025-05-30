@@ -18,9 +18,7 @@ from nimara_stripe.utils.helpers import get_logger
 LOGGER = get_logger()
 TRACER = Tracer(service=settings.release)
 
-app = FastAPI(
-    root_path="/nimara-stripe" if settings.debug else "",
-)
+app = FastAPI()
 app.include_router(stripe_router, prefix="/payment")
 app.include_router(saleor_router, prefix="/saleor")
 

@@ -1,6 +1,6 @@
 [project]
 name = "nimara-stripe"
-version = "1.0.0"
+version = "1.0.1"
 requires-python = "~=3.12"
 description = "Integration between Stripe and Saleor for payment processing"
 authors = [
@@ -87,14 +87,8 @@ port = 8080
 log_level = "DEBUG"
 
 [tool.smyth.handlers.saleor_handler]
-handler_path = "nimara_stripe.api.saleor.app.saleor_http_handler"
-url_path = "/saleor/{path:path}"
-timeout = 15
-concurrency = 3
-
-[tool.smyth.handlers.stripe_handler]
-handler_path = "nimara_stripe.api.stripe.app.stripe_http_handler"
-url_path = "/payment/{path:path}"
+handler_path = "nimara_stripe.app.http_handler"
+url_path = "{path:path}"
 timeout = 15
 concurrency = 3
 
