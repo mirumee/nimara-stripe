@@ -68,7 +68,7 @@ def cli(ctx: click.Context, localstack_host: str, port: int, region: str) -> Non
 
 
 @cli.command()
-@click.argument("name", help="Name of the secret to create")
+@click.argument("name")
 @click.option(
     "--initial-value",
     default="{}",

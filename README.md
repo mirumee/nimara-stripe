@@ -46,7 +46,7 @@ cp .env.example .env
 Using Docker Compose:
 
 ```bash
-docker compose up -P app
+docker compose run --rm -P app
 ```
 
 The application will be exposed on port 8080 by default.

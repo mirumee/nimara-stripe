@@ -5,12 +5,9 @@ from pydantic import SecretStr
 
 from nimara_stripe.api.saleor.schema import StripeConfigResponse
 from nimara_stripe.services.saleor.config import StripeSaleorConfigData
-from nimara_stripe.settings import settings
 
 
 def build_url(request_host: str, endpoint: str) -> str:
-    if settings.debug:
-        return f"https://{request_host}/nimara-stripe{endpoint}"
     return f"https://{request_host}{endpoint}"
 
 

@@ -4,27 +4,13 @@ from pytest_mock import MockerFixture
 from saleor_sdk.marina.exceptions import SaleorAppInstallationProblem
 
 from nimara_stripe.api.saleor.app import app
-from nimara_stripe.settings import settings
 
 pytestmark = pytest.mark.anyio
 
 client = TestClient(app)
 
 
-async def test_manifest_handler_if_debug_is_true():
-    request_host = "example.com"
-
-    response = client.get("/saleor/manifest", headers={"host": request_host})
-
-    assert response.status_code == 200
-    response_data = response.json()
-    assert response_data["id"] == "DEV.nimara-stripe"
-    assert response_data["appUrl"] == f"https://{request_host}/nimara-stripe/saleor/app"
-
-
-async def test_manifest_handler_if_debug_is_false(monkeypatch):
-    monkeypatch.setattr(settings, "debug", False)
-
+async def test_manifest_handler():
     request_host = "example.com"
 
     response = client.get("/saleor/manifest", headers={"host": request_host})
@@ -33,8 +19,6 @@ async def test_manifest_handler_if_debug_is_false(monkeypatch):
     response_data = response.json()
     assert response_data["id"] == "DEV.nimara-stripe"
     assert response_data["appUrl"] == f"https://{request_host}/saleor/app"
-
-    monkeypatch.undo()
 
 
 async def test_register_handler_success(mocker: MockerFixture):
