@@ -16,7 +16,7 @@ Integration between Stripe and Saleor for payment processing and tax calculation
 - Python 3.12+
 - [UV](https://docs.astral.sh/uv/getting-started/installation/) package manager
 - [Docker](https://www.docker.com/) and Docker Compose
-- [Localstack](https://github.com/mirumee/localstack-setup) (for local AWS services)
+- [Localstack](https://docs.localstack.cloud/overview/) (for local AWS services)
 - [Stripe account](https://dashboard.stripe.com/)
 
 ### Production
